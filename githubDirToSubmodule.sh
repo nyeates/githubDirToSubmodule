@@ -11,6 +11,8 @@
 # date with the latest github repo.
 ########################
 
+set -e # Error out if any command gives error
+
 # Variables
 ParentRepoPath=/usr/local/git/testSplit/
 NewRepoName=CombineDS
@@ -21,14 +23,15 @@ SuperprojectPath=/usr/local/git/testSplit/ # This could reference a different re
 
 # 0) Verify that Parent Repo Exists
 if ! ls $ParentRepoPath; then
-    echo "Parent Repo does not exist; edit scripts variables to fit your needs and setup"
+    echo "The existing parent repo does not exist where you told us to look; edit rgis scripts ParentRepoPath variable to fit your setup"
     exit 1
 fi
 
-# 1) Make new dir to house new repo - appropriately named after existing zenpack
-#cd $ParentRepoPath
+cd $ParentRepoPath
 for file in *; do
-    wc -l $file
+    wc -l $file # FIXME delete this, it is for testing to get into the for
+    # 1) Make new dir to house new repo - appropriately named after existing zenpack
+
     #    * get to directory of parent repo that has dir's that you want to split
     #  * ls -la
     #    * see directories that you want to split out
