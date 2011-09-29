@@ -4,8 +4,10 @@
 # format will come out like:
 # /path/to/dir/nameOfDir nameOfDir/
 #
+# Ex: ./directoryList.sh > output.txt
+#
 # Notes:
-# will cause issues with directories that have spaces in their names
+# Will cause issues with directories that have spaces in their names
 # Do not use with dirs with spaces in their names
 ########################
 

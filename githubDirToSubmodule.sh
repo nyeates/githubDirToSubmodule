@@ -18,8 +18,6 @@ set -e # Error out if any command gives error
 
 # Variables
 ParentRepoPath="/usr/local/git/testSplit/"
-#ListOfDirectories=`ls -l | grep ^d | awk '{print $9}' | grep -v ^\\.`
-#ListOfDirectories=`ls -d /usr/local/git/testSplit/*/`
 NewRepoName=CombineDS
 NewRepoPath=/usr/local/git/CombineDS/
 GitHubUserName=nyeates
