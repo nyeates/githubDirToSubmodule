@@ -1,3 +1,4 @@
+#!/bin/sh
 ########################
 # GithubDirToSubmodule
 # This shell script will automate the moving of all subdirectories in an
@@ -5,16 +6,20 @@
 # repos, and then makes a submodule reference to that new seperate repo.
 # The submodule is put into the original parent repo.
 #
-# Assumes that git repo already exists locally (defined by ParentRepoPath)
+# Assumes:
+# - That git repo already exists locally (defined by ParentRepoPath)
 # and is up to date with any reomote repo upstream (github). Make sure to
 # have any github repo cloned locally, and that your local clone is up to
 # date with the latest github repo.
+# - Subdirectories have no spaces in the name ex: "abc 123" wont be picked up correctly.
 ########################
 
 set -e # Error out if any command gives error
 
 # Variables
-ParentRepoPath=/usr/local/git/testSplit/
+ParentRepoPath="/usr/local/git/testSplit/"
+#ListOfDirectories=`ls -l | grep ^d | awk '{print $9}' | grep -v ^\\.`
+#ListOfDirectories=`ls -d /usr/local/git/testSplit/*/`
 NewRepoName=CombineDS
 NewRepoPath=/usr/local/git/CombineDS/
 GitHubUserName=nyeates
@@ -22,16 +27,24 @@ GitHubToken=
 SuperprojectPath=/usr/local/git/testSplit/ # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
 
 # 0) Verify that Parent Repo Exists
-if ! ls $ParentRepoPath; then
-    echo "The existing parent repo does not exist where you told us to look; edit rgis scripts ParentRepoPath variable to fit your setup"
+if [ ! -d $ParentRepoPath ]; then
+    echo "The parent repo $ParentRepoPath does not exist where you told us to look;"
+    echo "Assure that your originating repo is in place and edit this scripts"
+    echo "ParentRepoPath variable to fit your setup."
+    echo "Program exit with ERROR."
     exit 1
 fi
 
+# Get to directory of canonical / parent / originating repo that has the
+# directories that we want to export
 cd $ParentRepoPath
-for file in *; do
-    wc -l $file # FIXME delete this, it is for testing to get into the for
-    # 1) Make new dir to house new repo - appropriately named after existing zenpack
+ListOfDirectories=`ls -d /*`
+echo "Parent Repo is: $ParentRepoPath and pwd is: `pwd`"
+echo "ListOfDir is: $ListOfDirectories"
 
+for DirectoryName in $ListOfDirectories; do
+    echo "In for, DirectoryName is: $DirectoryName" # FIXME delete this, it is for testing to get into the for
+    # 1) Make new dir to house new repo - appropriately named after existing zenpack
     #    * get to directory of parent repo that has dir's that you want to split
     #  * ls -la
     #    * see directories that you want to split out
