@@ -1,0 +1,15 @@
+Workflow
+How to use the various files to turn sub-directories into separate repos and submodules
+
+=Which sub-directories=
+1) Update directoryList.sh with the 'Directory' variable referring to the repo where you have many subdirectories
+2) Run directoryList.sh and examine output
+ - look that all directories you want are there and look right
+ - assure that each line looks like: /path/to/dir/nameOfDir nameOfDir/
+3) Output to a file Ex: ./directoryList.sh > output.txt
+4) Remove any directories that you dont want separated
+
+=Change sub-directories into repos and submodules=
+1) Set variables in githubDirToSubmodule.sh
+ - ParentRepoPath, DirectoryListingFile. and NewContainingDir
+2) 

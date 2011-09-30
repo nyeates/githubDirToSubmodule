@@ -35,7 +35,7 @@ ParentRepoPath="/usr/local/git/testSplit/"
 DirectoryListingFile="/usr/local/git/githubDirToSubModule/output.txt"
 NewContainingDir="/ZenossCommunity/"
 GitHubUserName="nyeates"
-GitHubToken="7b1f1410c48ac9aaa21d7864f80bcc90"
+GitHubToken=""
 SuperprojectPath="/usr/local/git/testSplit/" # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
 
 # 0) Verify that Parent Repo Exists
