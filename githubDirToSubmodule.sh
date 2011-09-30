@@ -20,11 +20,12 @@ set -e # Error out if any command gives error
 ParentRepoPath="/usr/local/git/testSplit/"
 DirectoryListingFile="/usr/local/git/githubDirToSubModule/output.txt"
 NewContainingDir="/ZenossCommunity/"
-GitHubUserName=nyeates
-GitHubToken=
+GitHubUserName="nyeates"
+GitHubToken=""
 SuperprojectPath=/usr/local/git/testSplit/ # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
 
 # 0) Verify that Parent Repo Exists
+echo "# 0) Verify that Parent Repo Exists"
 if [ ! -d $ParentRepoPath ]; then
     echo "The parent repo $ParentRepoPath does not exist where you told us to look;"
     echo "Assure that your originating repo is in place and edit this scripts"
@@ -48,6 +49,7 @@ do
     echo "and its name is: $dirName"
     
     # 1) Make new dir to house new repo - appropriately named after existing zenpack
+    echo "# 1) Make new dir to house new repo - appropriately named after existing zenpack"
     
     # Get to directory of canonical / parent / originating repo that has the
     # directories that we want to export
@@ -68,25 +70,27 @@ do
     echo "Current working dir is: `pwd`"
 
     # 2) clone entire ZP repo to new local dir
+    echo "# 2) clone entire ZP repo to new local dir"
     git clone --no-hardlinks $ParentRepoPath $NewRepoPath
 
     # 3) Cut the cloned repo down to just one directory / zenpack
-    #  * git filter-branch --subdirectory-filter $NewRepoName --prune-empty --tag-name-filter cat -- --all
-    #  * git remote rm origin
-    #  * rm -rf .git/refs/original/
-    #  * git reflog expire --expire=now --all
-    #  * git gc --aggressive --prune=now
+    echo "# 3) Cut the cloned repo down to just one directory / zenpack"
+    git filter-branch --subdirectory-filter $NewRepoName --prune-empty --tag-name-filter cat -- --all
+    git remote rm origin
+    rm -rf .git/refs/original/
+    git reflog expire --expire=now --all
+    git gc --aggressive --prune=now
 
     # 4) Create new github repo
-    #  * curl -F 'login=$GitHubUserName' -F 'token=$GitHubToken' https://github.com/api/v2/json/repos/create -F 'name=$NewRepoName' -F 'description=$NewRepoName ZenPack'
-    #    * not sure how shell scripting brings in variables
-
+    echo "# 4) Create new github repo"
+    curl -F "login=$GitHubUserName" -F "token=$GitHubToken" https://github.com/api/v2/json/repos/create -F "name=$NewRepoName" -F "description=$NewRepoName ZenPack"
+    
     # 5) Set remote definition of new local repo
-    #  * git remote add origin git@github.com:$GitHubUserName/$NewRepoName.git
-    #    * not sure how shell scripting brings in variables
+    echo "# 5) Set remote definition of new local repo"
+    git remote add origin git@github.com:$GitHubUserName/$NewRepoName.git
 
     # 6) Push new local repo to new github repo
-    #  * git push origin master
+    #git push origin master
 
     # 7) Create submodule reference
     #  * cd $SuperprojectPath
