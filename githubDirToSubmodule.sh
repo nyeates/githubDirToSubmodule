@@ -36,7 +36,7 @@ DirectoryListingFile="/usr/local/git/githubDirToSubModule/output.txt"
 NewContainingDir="/ZenossCommunity/"
 GitHubUserName="nyeates"
 GitHubToken=""
-SuperprojectPath="/usr/local/git/testSplit/" # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
+SuperprojectPath="/usr/local/git/testSplit/" # Where you want the Submodules to end up; This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
 
 # 0) Verify that Parent Repo Exists
 echo -e "\n# 0) Verify that Parent Repo Exists"
@@ -44,7 +44,6 @@ if [ ! -d $ParentRepoPath ]; then
     echo "The parent repo $ParentRepoPath does not exist where you told us to look;"
     echo "Assure that your originating repo is in place and edit this scripts"
     echo "ParentRepoPath variable to fit your setup."
-    echo "Program exit with ERROR."
     exit 1
 fi
 
@@ -110,7 +109,7 @@ do
     # 7) Create submodule reference
     echo -e "\n# 7) Create submodule reference"
     cd $SuperprojectPath
-    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName}SubModule # FIXME remove SubModule
+    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName}SubModule # You can remove "SubModule" from the name given to the new submodule IF SuperProjectPath != ParentProjectPath; otherwise, you will get name conflicts
     git commit -m "first commit with submodule $NewRepoName"
 
     # 8) ... Repeat (While loop)

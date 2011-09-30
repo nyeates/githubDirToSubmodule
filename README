@@ -11,5 +11,16 @@ How to use the various files to turn sub-directories into separate repos and sub
 
 =Change sub-directories into repos and submodules=
 1) Set variables in githubDirToSubmodule.sh
- - ParentRepoPath, DirectoryListingFile. and NewContainingDir
-2) 
+ - ParentRepoPath, DirectoryListingFile. NewContainingDir, GitHubUserName, GitHubToken and SuperprojectPath
+ - Assure that directories and repos exist
+2) Assure that "break" is NOT commented out
+ - We want to only let the loop run once in order to test it and see that it works
+ - This is especially important if you have many subdirectories that you are running this on
+3) Run loop once
+ - ./githubDirToSubmodule.sh
+ - Look for good output
+4) Remove first directory from output.txt
+ - We have run it on this first one, and so now only need to run it on the others
+5) Run script on all other directories
+ - remove the "break" to do this
+ - ./githubDirToSubmodule.sh
