@@ -1,3 +1,19 @@
+########################
+# GithubDirToSubmodule
+# These set of shell scripts will automate the moving of many git 
+# subdirectories in an existing git repository. It moves directories, 
+# one by one, into separate repos, and then makes a submodule reference
+# to that new seperate repo. The submodule is put into the original
+# parent repo.
+#
+# Use the below workflow to use both of the files and an output.txt
+# file in unison, to complete the job of transfering many directories
+# over to seperate repos and submodules.
+#
+# See Notes in directoryList.sh and "Assumes" and "Troubleshooting"
+# sections in githubDirToSubmodule.sh for additional information.
+########################
+
 Workflow
 How to use the various files to turn sub-directories into separate repos and submodules
 
