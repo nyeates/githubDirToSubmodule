@@ -11,7 +11,21 @@
 # and is up to date with any reomote repo upstream (github). Make sure to
 # have any github repo cloned locally, and that your local clone is up to
 # date with the latest github repo.
-# - Subdirectories have no spaces in the name ex: "abc 123" wont be picked up correctly.
+# - Subdirectories have no spaces in the name ex: "abc 123" wont be picked
+# up correctly.
+# - A file contains the directories that you want to effect. This script
+# reads from that file. You can set the file in this script by changing
+# the variable DirectoryListingFile.
+#
+# Troubleshoot:
+# - If you get part way through a number of directories and something
+# errors and stops it all, you have recourse...
+#  - See where you are in the process, both which directory it stopped
+# on and what step (1-7). Complete the rest of the steps manually for
+# that dir. Next, go and edit the text input file and remove all dir's
+# that have already been properly processed. Run this script again and
+# you should be in business because it will only run on the remaining
+# directories.
 ########################
 
 set -e # Error out if any command gives error
@@ -44,7 +58,7 @@ do
     # Ignore lines with # at begining (comments)
     [[ $dirPath = \#* ]] && continue
     
-    echo ""
+    echo -e "\n# 0) Start Loop"
     echo "Next directory from $DirectoryListingFile is: '$dirPath'"
     echo "and its name is: $dirName"
     
@@ -99,6 +113,8 @@ do
     git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName}SubModule # FIXME remove SubModule
     git commit -m "first commit with submodule $NewRepoName"
 
-    # 8) ... Repeat (For or While loop)
-    break
-done < "$DirectoryListingFile"
+    # 8) ... Repeat (While loop)
+    break # Use this line to try out just one directory - the break will exit the while loop first time around - comment it out when you are ready to try it on many directories
+    
+# this is the file that is read from for the listing of which dir's to effect
+done < "$DirectoryListingFile" 
