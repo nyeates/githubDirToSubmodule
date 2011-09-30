@@ -104,6 +104,8 @@ do
 
     # 6) Push new local repo to new github repo
     echo -e "\n# 6) Push new local repo to new github repo"
+    # was having issues with #6 loading and stopping execution; put in artificial pause to prevent it
+    sleep 3
     git push origin master
 
     # 7) Create submodule reference
