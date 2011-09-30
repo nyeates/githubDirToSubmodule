@@ -22,10 +22,10 @@ DirectoryListingFile="/usr/local/git/githubDirToSubModule/output.txt"
 NewContainingDir="/ZenossCommunity/"
 GitHubUserName="nyeates"
 GitHubToken=""
-SuperprojectPath=/usr/local/git/testSplit/ # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
+SuperprojectPath="/usr/local/git/testSplit/" # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
 
 # 0) Verify that Parent Repo Exists
-echo "# 0) Verify that Parent Repo Exists"
+echo -e "\n# 0) Verify that Parent Repo Exists"
 if [ ! -d $ParentRepoPath ]; then
     echo "The parent repo $ParentRepoPath does not exist where you told us to look;"
     echo "Assure that your originating repo is in place and edit this scripts"
@@ -49,7 +49,7 @@ do
     echo "and its name is: $dirName"
     
     # 1) Make new dir to house new repo - appropriately named after existing zenpack
-    echo "# 1) Make new dir to house new repo - appropriately named after existing zenpack"
+    echo -e "\n# 1) Make new dir to house new repo - appropriately named after existing zenpack"
     
     # Get to directory of canonical / parent / originating repo that has the
     # directories that we want to export
@@ -70,11 +70,11 @@ do
     echo "Current working dir is: `pwd`"
 
     # 2) clone entire ZP repo to new local dir
-    echo "# 2) clone entire ZP repo to new local dir"
+    echo -e "\n# 2) clone entire ZP repo to new local dir"
     git clone --no-hardlinks $ParentRepoPath $NewRepoPath
 
     # 3) Cut the cloned repo down to just one directory / zenpack
-    echo "# 3) Cut the cloned repo down to just one directory / zenpack"
+    echo -e "\n# 3) Cut the cloned repo down to just one directory / zenpack"
     git filter-branch --subdirectory-filter $NewRepoName --prune-empty --tag-name-filter cat -- --all
     git remote rm origin
     rm -rf .git/refs/original/
@@ -82,43 +82,23 @@ do
     git gc --aggressive --prune=now
 
     # 4) Create new github repo
-    echo "# 4) Create new github repo"
+    echo -e "\n# 4) Create new github repo"
     curl -F "login=$GitHubUserName" -F "token=$GitHubToken" https://github.com/api/v2/json/repos/create -F "name=$NewRepoName" -F "description=$NewRepoName ZenPack"
     
     # 5) Set remote definition of new local repo
-    echo "# 5) Set remote definition of new local repo"
+    echo -e "\n\n# 5) Set remote definition of new local repo"
     git remote add origin git@github.com:$GitHubUserName/$NewRepoName.git
 
     # 6) Push new local repo to new github repo
-    #git push origin master
+    echo -e "\n# 6) Push new local repo to new github repo"
+    git push origin master
 
     # 7) Create submodule reference
-    #  * cd $SuperprojectPath
-    #  * git submodule add git://github.com/$GitHubUserName/$NewRepoName.git $NewRepoNameSubModule
-    #    * not sure how shell scripting brings in variables - see last part of above command
-    #  * git commit -m 'first commit with submodule $NewRepoName'
-    #    * not sure how shell scripting brings in variables
+    echo -e "\n# 7) Create submodule reference"
+    cd $SuperprojectPath
+    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName}SubModule # FIXME remove SubModule
+    git commit -m "first commit with submodule $NewRepoName"
 
     # 8) ... Repeat (For or While loop)
     break
 done < "$DirectoryListingFile"
-
-
-# useful shell lines - remove afterwards FIXME
-#echo "My name is $myname"
-#echo "Hello $USER"
-#echo "Today is \c ";date
-#echo "Number of user login : \c" ; who | wc -l
-#
-#expr $x / $y
-#z=`expr $x / $y`
-#echo $z
-#$echo "Today date is `date`"
-#ls /bin/[a-c]*
-# Will show all files name beginning with letter a,b or c like
-#ls /bin/[!a-o]
-# do not show us file name that beginning with a,b,c,e...o,
-
-# exit status
-#exit code 0            = Success
-#exit code 1, non zero = Failure
