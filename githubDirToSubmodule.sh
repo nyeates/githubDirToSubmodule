@@ -18,8 +18,8 @@ set -e # Error out if any command gives error
 
 # Variables
 ParentRepoPath="/usr/local/git/testSplit/"
-NewRepoName=CombineDS
-NewRepoPath=/usr/local/git/CombineDS/
+DirectoryListingFile="/usr/local/git/githubDirToSubModule/output.txt"
+NewContainingDir="/ZenossCommunity/"
 GitHubUserName=nyeates
 GitHubToken=
 SuperprojectPath=/usr/local/git/testSplit/ # This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
@@ -33,25 +33,42 @@ if [ ! -d $ParentRepoPath ]; then
     exit 1
 fi
 
-# Get to directory of canonical / parent / originating repo that has the
-# directories that we want to export
-cd $ParentRepoPath
-ListOfDirectories=`ls -d /*`
-echo "Parent Repo is: $ParentRepoPath and pwd is: `pwd`"
-echo "ListOfDir is: $ListOfDirectories"
+# Debug to assure File to read-directories-from is known
+echo "File to read from is: $DirectoryListingFile"
 
-for DirectoryName in $ListOfDirectories; do
-    echo "In for, DirectoryName is: $DirectoryName" # FIXME delete this, it is for testing to get into the for
+# While I can read from the file, use this line
+# To see file being read from, see matching 'done' at bottom of this while
+while read -r dirPath dirName
+do
+    # Ignore lines with # at begining (comments)
+    [[ $dirPath = \#* ]] && continue
+    
+    echo ""
+    echo "Next directory from $DirectoryListingFile is: '$dirPath'"
+    echo "and its name is: $dirName"
+    
     # 1) Make new dir to house new repo - appropriately named after existing zenpack
-    #    * get to directory of parent repo that has dir's that you want to split
-    #  * ls -la
-    #    * see directories that you want to split out
-    #  * Record Xth directory: $NewRepoName
-    #  * mkdir   $NewRepoPath
-    #  * cd $NewRepoPath
+    
+    # Get to directory of canonical / parent / originating repo that has the
+    # directories that we want to export
+    cd $ParentRepoPath
+    echo "Parent Repo is set as: $ParentRepoPath"
+    echo "Current working dir is: `pwd`"
+    
+    # Note that directories that are going to be acted-upon are already known
+    # We do not need to read them at this point. The directories were recorded
+    # in the $DirectoryListingFile. You can use the script directoryListing.sh
+    # to create this file.
+    
+    NewRepoPath="${ParentRepoPath%/*/*}$NewContainingDir$dirName"
+    NewRepoName="$dirName"
+    mkdir $NewRepoPath
+    cd $NewRepoPath
+    echo "Created new directory: $NewRepoPath"
+    echo "Current working dir is: `pwd`"
 
     # 2) clone entire ZP repo to new local dir
-    #  * git clone --no-hardlinks $ParentRepoPath $NewRepoPath
+    git clone --no-hardlinks $ParentRepoPath $NewRepoPath
 
     # 3) Cut the cloned repo down to just one directory / zenpack
     #  * git filter-branch --subdirectory-filter $NewRepoName --prune-empty --tag-name-filter cat -- --all
@@ -79,7 +96,9 @@ for DirectoryName in $ListOfDirectories; do
     #    * not sure how shell scripting brings in variables
 
     # 8) ... Repeat (For or While loop)
-done
+    break
+done < "$DirectoryListingFile"
+
 
 # useful shell lines - remove afterwards FIXME
 #echo "My name is $myname"

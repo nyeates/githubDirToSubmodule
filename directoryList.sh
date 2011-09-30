@@ -2,7 +2,7 @@
 ########################
 # Makes a list of subdirectories and their full paths
 # format will come out like:
-# /path/to/dir/nameOfDir
+# /path/to/dir/nameOfDir nameOfDir/
 #
 # Ex: ./directoryList.sh > output.txt
 #
@@ -22,8 +22,8 @@ directoryListing()
     
     # for each directory in the current directory
     for directory in */; do
-        # print full path of dir
-        printf "%s\n" "$PWD/$directory"
+        # print full path of dir AND directory name only (without trailing slash)
+        printf "%s %s\n" "$PWD/$directory" "${directory%/}"
     done
 )
 

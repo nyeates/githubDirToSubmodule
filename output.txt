@@ -1,0 +1,7 @@
+/usr/local/git/testSplit/CombineDS/ CombineDS
+/usr/local/git/testSplit/CombineDSSubModule/ CombineDSSubModule
+/usr/local/git/testSplit/NewServiceZP/ NewServiceZP
+/usr/local/git/testSplit/OSXMon/ OSXMon
+/usr/local/git/testSplit/PieChartWidget/ PieChartWidget
+/usr/local/git/testSplit/ReportMod/ ReportMod
+/usr/local/git/testSplit/WinPerfSNMP/ WinPerfSNMP
