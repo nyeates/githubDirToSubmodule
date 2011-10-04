@@ -1,5 +1,6 @@
 ########################
 # GithubDirToSubmodule
+# By Nick Yeates nyeates1 at umbc dot edu
 # These set of shell scripts will automate the moving of many git 
 # subdirectories in an existing git repository. It moves directories, 
 # one by one, into separate repos, and then makes a submodule reference
