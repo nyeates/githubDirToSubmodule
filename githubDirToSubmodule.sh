@@ -16,6 +16,8 @@
 # - A file contains the directories that you want to effect. This script
 # reads from that file. You can set the file in this script by changing
 # the variable DirectoryListingFile.
+# - SuperprojectPath is an established repo (you can make it new with
+# "git init")
 #
 # Troubleshoot:
 # - If you get part way through a number of directories and something
