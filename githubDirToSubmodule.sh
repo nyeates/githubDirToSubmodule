@@ -7,6 +7,10 @@
 # The submodule is put into the original parent repo.
 #
 # Assumes:
+# - That the subdirectories you are turning into seperate git repos, are
+# all from the same single repository (defined by ParentRepoPath). If you
+# would like to do this on arbitrary directories or from multiple repos,
+# you will need to heavily modify this code.
 # - That git repo already exists locally (defined by ParentRepoPath)
 # and is up to date with any reomote repo upstream (github). Make sure to
 # have any github repo cloned locally, and that your local clone is up to
@@ -16,7 +20,7 @@
 # - A file contains the directories that you want to effect. This script
 # reads from that file. You can set the file in this script by changing
 # the variable DirectoryListingFile.
-# - SuperprojectPath is an established repo (you can make it new with
+# - SuperprojectPath is an established repo (you can make it new with 
 # "git init")
 #
 # Troubleshoot:
@@ -33,12 +37,12 @@
 set -e # Error out if any command gives error
 
 # Variables
-ParentRepoPath="/usr/local/git/testSplit/"
-DirectoryListingFile="/usr/local/git/githubDirToSubModule/output.txt"
-NewContainingDir="/ZenossCommunity/"
+ParentRepoPath="/usr/local/git/backlogZenPacks/" # This is the directory where
+DirectoryListingFile="/usr/local/git/githubDirToSubModuleZenPackEdition/output.txt" # This file lists the directories that you want to turn into new seperate repos; each line in the file will be made into its own repository
+NewContainingDir="/ZenossCommunity/" # Place to put newly created Repos; these multiple repos come from the many directories listed in the $DirectoryListingFile
 GitHubUserName="nyeates"
 GitHubToken=""
-SuperprojectPath="/usr/local/git/testSplit/" # Where you want the Submodules to end up; This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
+SuperprojectPath="/usr/local/git/CommunityZenPackSubModules/" # Where you want the Submodules to end up; This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
 
 # 0) Verify that Parent Repo Exists
 echo -e "\n# 0) Verify that Parent Repo Exists"
@@ -65,12 +69,6 @@ do
     
     # 1) Make new dir to house new repo - appropriately named after existing zenpack
     echo -e "\n# 1) Make new dir to house new repo - appropriately named after existing zenpack"
-    
-    # Get to directory of canonical / parent / originating repo that has the
-    # directories that we want to export
-    cd $ParentRepoPath
-    echo "Parent Repo is set as: $ParentRepoPath"
-    echo "Current working dir is: `pwd`"
     
     # Note that directories that are going to be acted-upon are already known
     # We do not need to read them at this point. The directories were recorded
@@ -113,11 +111,11 @@ do
     # 7) Create submodule reference
     echo -e "\n# 7) Create submodule reference"
     cd $SuperprojectPath
-    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName}SubModule # You can remove "SubModule" from the name given to the new submodule IF SuperProjectPath != ParentProjectPath; otherwise, you will get name conflicts
+    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName} # FIXME remove SubModule
     git commit -m "first commit with submodule $NewRepoName"
 
     # 8) ... Repeat (While loop)
-    break # Use this line to try out just one directory - the break will exit the while loop first time around - comment it out when you are ready to try it on many directories
+    #break # Use this line to try out just one directory - the break will exit the while loop first time around - comment it out when you are ready to try it on many directories
     
 # this is the file that is read from for the listing of which dir's to effect
 done < "$DirectoryListingFile" 
