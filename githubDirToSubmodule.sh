@@ -36,13 +36,27 @@
 
 set -e # Error out if any command gives error
 
+###########
 # Variables
-ParentRepoPath="/usr/local/git/backlogZenPacks/" # This is the directory where
-DirectoryListingFile="/usr/local/git/githubDirToSubModuleZenPackEdition/output.txt" # This file lists the directories that you want to turn into new seperate repos; each line in the file will be made into its own repository
-NewContainingDir="/ZenossCommunity/" # Place to put newly created Repos; these multiple repos come from the many directories listed in the $DirectoryListingFile
-GitHubUserName="nyeates"
+###########
+# This is the directory where there is one repo and many subdirectories that you want to split to seperate repos
+ParentRepoPath="/usr/local/git/testSplit/"
+
+# This file lists the directories that you want to turn into new seperate repos; each line in the file will be made into its own repository
+DirectoryListingFile="/usr/local/git/githubDirToSubModuleZenPackEdition/output.txt" 
+
+# Place to put newly created Repos; these multiple repos come from the many directories listed in the $DirectoryListingFile
+NewContainingDir="/ZenossCommunity/" 
+
+# Username you want this uploaded to github as
+GitHubUserName=""
+
+# Instead of a password, you can register your applications with Tokens; Create this in the github.com preferences
 GitHubToken=""
-SuperprojectPath="/usr/local/git/CommunityZenPackSubModules/" # Where you want the Submodules to end up; This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
+
+# Where you want the Submodules to end up; This could reference a different repo than the ParentRepo, if you want the submodule link to show in a different repo from the original parent repo
+SuperprojectPath="/usr/local/git/CommunityZenPackSubModules/" 
+###########
 
 # 0) Verify that Parent Repo Exists
 echo -e "\n# 0) Verify that Parent Repo Exists"
@@ -111,11 +125,11 @@ do
     # 7) Create submodule reference
     echo -e "\n# 7) Create submodule reference"
     cd $SuperprojectPath
-    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName} # FIXME remove SubModule
+    git submodule add git://github.com/$GitHubUserName/$NewRepoName.git ${NewRepoName}SubModule # You can remove "SubModule" from the end of this line IF SuperProjectPath != ParentProjectPath; otherwise, you will get name conflicts; The last section of the command represents what the directory name for the new submodule will be in the superproject 
     git commit -m "first commit with submodule $NewRepoName"
 
     # 8) ... Repeat (While loop)
-    #break # Use this line to try out just one directory - the break will exit the while loop first time around - comment it out when you are ready to try it on many directories
+    break # Use this line to try out just one directory - the break will exit the while loop first time around - comment it out when you are ready to try it on many directories
     
 # this is the file that is read from for the listing of which dir's to effect
 done < "$DirectoryListingFile" 
